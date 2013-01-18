@@ -1,85 +1,68 @@
 package esa_review.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Produto {
+
+	@Id	
+	@Column(name = "prod_cod")
+	private String codigo;
+	@Column (name = "prod_nome")
+	private String nome;
+	@Column (name = "prod_desc")
+	private String descri;
+	//private String categ;
+	@Column (name = "prod_preco")
+	private float preco;
+	@Column (name = "prod_img")
+	private String imagem;
+
 	
-	private String desc;
-    private String categ;
-    private float preco;
-    private int codigo;
-    private String imagem;
-    
-    public Produto(String desc, String categ, float preco, int codigo, String img){
-        
-        this.desc = desc;
-        this.categ = categ;
-        this.preco = preco;
-        this.codigo = codigo;  
-        this.imagem = img;
-    
-    
-    }
+	public Produto(){
+		
+	}
 
-    /**
-     * @return the desc
-     */
-    public String getDesc() {
-        return desc;
-    }
+	public String getCodigo() {
+		return this.codigo;
+	}
+	
+	public void setCodigo(String cod){
+		this.codigo = cod;
+	}
 
-    /**
-     * @param desc the desc to set
-     */
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    /**
-     * @return the categ
-     */
-    public String getCateg() {
-        return categ;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    /**
-     * @param categ the categ to set
-     */
-    public void setCateg(String categ) {
-        this.categ = categ;
-    }
+	public String getDescri() {
+		return descri;
+	}
 
-    /**
-     * @return the preco
-     */
-    public float getPreco() {
-        return preco;
-    }
+	public void setDescri(String descri) {
+		this.descri = descri;
+	}
 
-    /**
-     * @param preco the preco to set
-     */
-    public void setPreco(float preco) {
-        this.preco = preco;
-    }
+	public float getPreco() {
+		return this.preco;
+	}
 
-    /**
-     * @return the codigo
-     */
-    public int getCodigo() {
-        return codigo;
-    }
+	public void setPreco(float preco) {
+		this.preco = preco;
+	}
 
-    /**
-     * @return the imagem
-     */
-    public String getImagem() {
-        return imagem;
-    }
+	public String getImagem() {
+		return this.imagem;
+	}
 
-    /**
-     * @param imagem the imagem to set
-     */
-    public void setImagem(String imagem) {
-        this.imagem = imagem;
-    }
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
+	}
 
 }

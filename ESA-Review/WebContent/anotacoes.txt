@@ -1,0 +1,32 @@
+----Upload de imagens-----
+
+
+*** Problema ***
+a classe Imagens é utilizada tanto por Usuario quanto Produto.
+ao add foto do usuario ele pegar o id do usuario e renomeia a foto como: id.jpg
+o problema é se o id do usuario e produto forem iguais ele vai pegar a mesma foto.
+
+Se ao inves do pegar so id pegar nome_id.jpg na hora de editar produto ou usuario vai dar errado, pois quando eu alterar o nome do produto ou usuario e não alterar a foto, na hora em
+for listar o produto alterar ele vai buscar a foto com o nome anterior.
+
+
+-------------------------------------- 
+
+======== Erros =========
+
+não deixar inserir produtos com mesmo codigo (V)
+
+
+
+=====================================================
+
+------------ Validação----------------
+
+formatar e validade campo preco ( )
+
+
+----------------------------------
+
+------------ Dúvida ----------------
+
+Deve-se editar o código?

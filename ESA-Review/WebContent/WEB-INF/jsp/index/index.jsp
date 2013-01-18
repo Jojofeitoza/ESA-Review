@@ -1,17 +1,14 @@
-<!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>ESA-Review</title>
-	</head>
-	<body>
-		<a href="${pageContext.request.contextPath}/">In&iacute;cio</a> |
-		<a href="${pageContext.request.contextPath}/usuario">Usu&aacute;rios</a> |
-		<a href="${pageContext.request.contextPath}/usuario/novo">Novo Usu&aacute;rio</a> |
-		<a href="${pageContext.request.contextPath}/produto">Produtos</a> |
-		<a href="${pageContext.request.contextPath}/produto/novo">Novo Produto</a><br/><br/>
-
-	</body>
-</html>
+<jsp:include page="../add-on/header.jsp"/> 
+		<p>Bem vindo ao Sistema de Review de Produtos.</p>
+		
+			<form action="" class="formlogin">
+				<input type="text" name="login" value="login" onBlur="if(this.value == '') this.value = 'login'" onFocus="if(this.value == 'login') this.value = ''">
+				<br>
+				<input type="password" name="senha" value="senha" onBlur="if(this.value == '') this.value = 'senha'" onFocus="if(this.value == 'senha') this.value = ''">
+				<br>
+				<input type="submit" name="botao" value="Acessar" class="btn btn-primary">
+			</form>
+			
+<jsp:include page="../add-on/footer.jsp"/> 
+		
+		
