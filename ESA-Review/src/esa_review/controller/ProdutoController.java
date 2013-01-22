@@ -21,6 +21,7 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 
 @Resource
 public class ProdutoController {
+//
 
 	private final ProdutoDAO produtoDAO;
 	private final Result result;
