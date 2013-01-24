@@ -18,6 +18,12 @@ não deixar inserir produtos com mesmo codigo (V)
 
 
 
+Jan 23, 2013 3:01:20 PM org.apache.catalina.session.StandardManager startInternal
+Grave: Exception loading sessions from persistent storage
+java.io.WriteAbortedException: writing aborted; java.io.NotSerializableException: esa_review.model.UsuarioWeb
+	at java.io.ObjectInputStream.readObject0(Unknown Source)
+
+
 =====================================================
 
 ------------ Validação----------------
@@ -30,3 +36,15 @@ formatar e validade campo preco ( )
 ------------ Dúvida ----------------
 
 Deve-se editar o código?
+
+
+
+Falta
+
+alterar senha
+exebiri perfil
+
+
+
+ 
+

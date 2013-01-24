@@ -17,7 +17,8 @@
 				<label>Pre&ccedil;o:</label>
 				<input type="text" name="produto.preco" value="${produto.preco}"/><br/>				
 
-				<input type="submit" value="salvar" class="btn"/>
+				<input type="submit" value="Atualizar" class="btn btn-primary"/>
+				<input class="btn btn-primary" type="reset" value="Limpar"/><br>
 			</form>
 		</fieldset>
 		

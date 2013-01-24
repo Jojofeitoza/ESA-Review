@@ -5,12 +5,11 @@ import java.util.Collection;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import com.sun.org.apache.xerces.internal.impl.validation.ValidationManager;
-
 import esa_review.dao.CriadorDeSessionFactory;
 import esa_review.dao.CriadorSession;
 import esa_review.dao.ProdutoDAO;
 import esa_review.model.Produto;
+import Autenticacao.Restrito;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
@@ -38,12 +37,14 @@ public class ProdutoController {
 		
 	}
 	
+	@Restrito
 	@Get("/produto/novo")
 	public void novo() {
 		
 		
 	}
 	
+	@Restrito
 	@Get("/produto/{produto.codigo}/exibir") // {produto.codigo} instancia o objeto produto, chama o setCodigo e esse objeto é passo como parametro no metodo exibir
 	public void exibir(Produto produto){
 		
@@ -54,7 +55,7 @@ public class ProdutoController {
 	}
 	
 	
-	
+	@Restrito
 	@Get("/produto")
 	public void listar(){//nome do metodo tem que ser igual ao nome da pagina jsp(lista.jsp)
 		
@@ -64,6 +65,7 @@ public class ProdutoController {
 		
 	}
 	
+	@Restrito
 	@Post("/produto")
 	public void salvar(final Produto produto){
 		
@@ -74,6 +76,7 @@ public class ProdutoController {
 		result.include("messagem", "Produto cadastrado com sucesso!").redirectTo(this).listar();		
 	}
 	
+	@Restrito
 	@Delete("/produto/{produto.codigo}")
 	public void remover(Produto produto){
 		
@@ -84,6 +87,7 @@ public class ProdutoController {
 		
 	}
 	
+	@Restrito
 	@Get("/produto/{produto.codigo}/editar")
 	public void editar(Produto produto){
 		
@@ -93,6 +97,7 @@ public class ProdutoController {
 				
 	}
 	
+	@Restrito
 	@Post("/produto/atualizar")
 	public void atualizar(Produto produto){	
 

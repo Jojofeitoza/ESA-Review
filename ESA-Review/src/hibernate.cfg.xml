@@ -31,6 +31,9 @@
 		<property name="format_sql">true</property>
 		
 		<mapping class="esa_review.model.Produto" />
+		<mapping class="esa_review.model.Usuario" />
+		<mapping class="esa_review.model.UsuarioWeb" />
+		
 		
 		
 	</session-factory>

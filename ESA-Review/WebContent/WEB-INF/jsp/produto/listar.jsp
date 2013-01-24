@@ -23,16 +23,14 @@
 					</a>
 				</td>
 
-
-
 				<td>${produto.nome}</td>
 				<td>${produto.descri}</td>
 				<td>${produto.preco}</td>
-
-
-
-
-				<td><form action="${pageContext.request.contextPath}/produto/${produto.codigo}/exibir"	method="get">
+				
+				<td>
+				
+				<!-- Testar usando essa form : <a href='${pageContext.request.contextPath}/logout' ><button class="btn" type="submit">Logout</button></a> -->
+				<form action="${pageContext.request.contextPath}/produto/${produto.codigo}/exibir"	method="get">
 						<input type="submit" value="exibir" class="btn" />
 					</form>
 				</td>
@@ -49,7 +47,7 @@
 					</form></td>
 
 			</tr>
-			<br />
+			
 
 
 		</c:forEach>

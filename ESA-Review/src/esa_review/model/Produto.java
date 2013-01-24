@@ -7,6 +7,7 @@ import javax.persistence.Id;
 @Entity
 public class Produto {
 
+
 	@Id	
 	@Column(name = "prod_cod")
 	private String codigo;
