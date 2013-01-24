@@ -6,6 +6,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Usuario {
+<<<<<<< HEAD
 	
 	
 	@Id	
@@ -56,6 +57,9 @@ public class Usuario {
 	public String getE_mail() {
 		return e_mail;
 	}
+=======
+///
+>>>>>>> e17ea0a4b9553fbfc259a350aad4b096554e17dd
 
 	public void setE_mail(String e_mail) {
 		this.e_mail = e_mail;
