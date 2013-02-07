@@ -33,7 +33,7 @@
 		<mapping class="esa_review.model.Produto" />
 		<mapping class="esa_review.model.Usuario" />
 		<mapping class="esa_review.model.UsuarioWeb" />
-		
+		<mapping class="esa_review.model.Review" />
 		
 		
 	</session-factory>
