@@ -21,27 +21,29 @@ public class ImagemController {
 		this.result = result;
 	}
 
-	@Get("/imagem/{codigo}/alterar")//poder ser qualquer nome: /imagem/{codigo/alt}	// {codigo} codigo é uma variavel que ira armazenar o valor vindo via get da pagina listar.jsp(<a href=.../imagem/${produto.codigo}" ...)
+	@Get("/imagem/{id}/alterar")//poder ser qualquer nome: /imagem/{codigo/alt}	// {codigo} codigo é uma variavel que ira armazenar o valor vindo via get da pagina listar.jsp(<a href=.../imagem/${produto.codigo}" ...)
 	
-	public void alterar(int codigo) {
+	public void alterar(int id) {
 
-		this.result.include("id_", codigo);// se eu não colocar o redirectTo ele
+		this.result.include("id_", id);// se eu não colocar o redirectTo ele
 											// redireciona para alterar.jsp
 
 	}
 
-	@Post("/imagem/{codigo}") // variavel codigo pode ser qualquer outro nome e o parametro do metodo upload tem que ser igual a essa variavel
-	public void upload(final UploadedFile imagem, int codigo) {		
+	@Post("/imagem/{id}") // variavel codigo pode ser qualquer outro nome e o parametro do metodo upload tem que ser igual a essa variavel
+	public void upload(final UploadedFile imagem, int id) {		
 		
-		imagens.salva(imagem, codigo);		
+		System.out.println(id);
+		
+		imagens.salva(imagem, id);		
 
 		this.result.redirectTo(ProdutoController.class).listar(); //aqui tenho que mudar para ele ir para pagina exibir.jsp, que vai exibir somento o produto
 
 	}
 	
-	@Get("/imagem/{codigo}")
-	public File download(int codigo) {
+	@Get("/imagem/{id}")
+	public File download(int id) {
 		
-		return imagens.mostra(codigo);
+		return imagens.mostra(id);
 	}
 }

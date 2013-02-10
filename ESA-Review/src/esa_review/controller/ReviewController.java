@@ -4,17 +4,19 @@ import java.util.Collection;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
 import Autenticacao.Restrito;
-import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.validator.ValidationMessage;
 import esa_review.dao.CriadorDeSessionFactory;
 import esa_review.dao.CriadorSession;
+import esa_review.dao.ProdutoDAO;
 import esa_review.dao.ReviewDAO;
+import esa_review.dao.UsuarioDAO;
 import esa_review.model.Produto;
 import esa_review.model.Review;
 
@@ -24,11 +26,14 @@ public class ReviewController {
 	private final ReviewDAO reviewDAO;
 	private final Result result;
 	private Validator validator;
+	private final UsuarioDAO usuarioDAO;
+	private final ProdutoDAO produtoDAO;// acrescentado 08/02/2013
 	
-	
-	public ReviewController(Result r, Validator validator){
+	public ReviewController(Result r, Validator validator, UsuarioDAO usuarioDAO,
+							ProdutoDAO produtoDAO){
 		this.result = r;
-		
+		this.usuarioDAO = usuarioDAO;
+		this.produtoDAO = produtoDAO;// acrescentado 08/02/2013
 		SessionFactory factory = new CriadorDeSessionFactory().getInstance();
 		Session session = new CriadorSession(factory).getInstance();
 		
@@ -62,7 +67,8 @@ public class ReviewController {
 	public void listar(){//nome do metodo tem que ser igual ao nome da pagina jsp(lista.jsp)
 		
 		Collection<Review> reviewList = this.reviewDAO.listAll();
-		
+		Collection<Produto> produtoList = this.produtoDAO.listAll();// acrescentado 08/02/2013
+		result.include("produtoList", produtoList);// acrescentado 08/02/2013
 		result.include("reviewList", reviewList);
 		
 	}
@@ -70,25 +76,14 @@ public class ReviewController {
 	@Restrito
 	@Post("/review")
 	public void salvar(final Review review){
-		review.setContN(1);
+		
+		//review.setContP(1);
+		
 		reviewDAO.save(review);
 		
 		result.redirectTo(this).listar();		
 	}
-	@Restrito
-	@Post("/review")
-	public void votacao(final Review review
-						 ,int contP, int contN
-			             ){
-		
-		
-		review.setContN(1);
-		result.include("contP", contP);
-		result.include("contN", contN);
-		this.reviewDAO.update(review);
-		
-		result.redirectTo(this).listar();	
-	}
+
 /*	@Restrito
 	@Delete("/review/{review.codigo}")
 	public void remover(Review review){
@@ -109,12 +104,19 @@ public class ReviewController {
 		result.include("review", review);
 				
 	}*/
-	
-	/**@Restrito
+	@Restrito
+	@Path("/review/votacao")
+	public void votacao(Review review){
+		
+		//reviewDAO.loadById(review).setContN(reviewDAO.loadById(review).getContN() + 1);
+		this.atualizar(review);
+		result.redirectTo(this).listar();
+	}
+	@Restrito
 	@Post("/review/atualizar")
 	public void atualizar(Review review){	
 
-		
+		/*
 		
 		//  Para usar método validarCampos(Produto produto) aqui tenho que modificar para que não seja possível editar o codigo.
 		 
@@ -152,15 +154,15 @@ public class ReviewController {
 		
 		
 		
+		*/
 		
 		
+		this.reviewDAO.update(review);
 		
-		//this.reviewDAO.update(review);
-		
-		//result.forwardTo(this).exibir(review);		
+		result.forwardTo(this).exibir(review);		
 		
 		
-	}*/
+	}
 	
 	
 	
@@ -216,8 +218,6 @@ public class ReviewController {
 		//fim - Validação de campos utilizando a Classe Validator do Vraptor
 	}
 	*/
+//modificado
 	
-
 }
-
-
