@@ -1,8 +1,8 @@
 package esa_review.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
-import java.util.ArrayList;
 import ordena_review.BoobleSort;
 
 import org.hibernate.Session;
@@ -10,7 +10,6 @@ import org.hibernate.SessionFactory;
 
 import Autenticacao.Restrito;
 import br.com.caelum.vraptor.Get;
-import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
@@ -63,8 +62,8 @@ public class ReviewController {
 		result.include("reviewList", reviewList);
 		
 		review = reviewDAO.loadById(review);
-		
 		result.include("review", review);
+		
 		
 	}
 	
@@ -72,12 +71,14 @@ public class ReviewController {
 	@Restrito
 	@Get("/review")
 	public void listar(){//nome do metodo tem que ser igual ao nome da pagina jsp(lista.jsp)
-		//Review review = new Review();
+		Review review = new Review();
 		Collection<Review> reviewList = this.reviewDAO.listAll();
+		
 		// ordenar a lista pela votação posiitiva
 		//ArrayList lista =  (ArrayList) reviewList;
 		//BoobleSort booble = new BoobleSort(  );
-		//reviewList  = (Collection<Review>) //booble.ordena(lista);
+		//reviewList  = (Collection<Review>) booble.ordena(lista);
+		
 		Collection<Produto> produtoList = this.produtoDAO.listAll();// acrescentado 08/02/2013
 		result.include("produtoList", produtoList);// acrescentado 08/02/2013
 		result.include("reviewList", reviewList);
@@ -115,6 +116,7 @@ public class ReviewController {
 		result.include("review", review);
 				
 	}*/
+	
 	@Restrito
 	@Get("/review/{review.id}/votarPositivo")
 	public void votarPositivo(Review review){	
@@ -144,7 +146,7 @@ public class ReviewController {
 		
 		this.atualizar(aux);
 	}
-
+	
 	@Restrito
 	@Post("/review/atualizar")
 	public void atualizar(Review review){	
@@ -192,7 +194,7 @@ public class ReviewController {
 		
 		this.reviewDAO.update(review);
 		
-		result.forwardTo(this).exibir(review);		
+		result.forwardTo(this).listar();		
 		
 		
 	}
@@ -251,6 +253,8 @@ public class ReviewController {
 		//fim - Validação de campos utilizando a Classe Validator do Vraptor
 	}
 	*/
-//modificado
 	
+
 }
+
+
