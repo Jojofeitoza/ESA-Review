@@ -2,107 +2,52 @@
 
 <%-- formata o numero exibindo até os zeros decimais --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<div class="colleft" style="width: 1000px;" >
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.9.0.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.maskMoney.js"></script>
+
+<fieldset style="width: 330px;">
+	<legend>${nome}</legend>
+
+
+	<div>
+		<img src="${pageContext.request.contextPath}/imagem/${review.prod_id}" style="width: 200px; height: 200px" border="0" /></br>
+	</div>
+	
+	
+	<div>		
+		<span style="font-size: 19px; font: bold;" >Review</span>
+		<p>${review.descricao}</p>
 		
-<script type="text/javascript">
-
-	function votoPositivo() {	
-		alert("Voto realizado com sucesso!\n"+"Positivo");
-		var formu,pos,neg,valor;
-		var msge = document.getElementById("msg");
-		var dd = document.getElementById("p");
-		var nn = document.getElementById("n");
-		msge.style.color="green";
-		msge.innerHTML = "<h3>Voto realizado com sucesso!</h3>";
-		formu = document.getElementById("form");
-		valor = formu.p.value;
-		dd.disabled = true;
-		nn.disabled = true;		
-		formu.submit();
-		//return true;				   	
-  	}
+	</div>
+	<br>
 	
-	function votoNegativo() {	
-		alert("Voto realizado com sucesso!\n"+"Negativo");
-		var formu,pos,neg,valor;
-		var msge = document.getElementById("msg");
-		var dd = document.getElementById("p");
-		var nn = document.getElementById("n");
-		msge.style.color="green";
-		msge.innerHTML = "<h3>Voto realizado com sucesso!</h3>";
-		formu = document.getElementById("form");
-		valor = formu.n.value;
-		dd.disabled = true;
-		nn.disabled = true;	
-		formu.submit();
-		//return true;	
-  	}
-
-</script>
-
-
-<fieldset style="width: 800px;">
-  <legend><h1>Review</h1></legend>
- 
-	 <table class="table table-bordered table-condensed table-hover" style="width: 200%" >
-	   <tr>
-			<td>Review</td>
-			<td>Votar</td>
-	   </tr>	
-	   <td>
-		 <div>	
-			<img src="${pageContext.request.contextPath}/imagem/${review.prod_id}"style="width: 60px; height: 60px" border="0" class="img-rounded" />	
-		 </div>
-		 <div>
-			<span style="font-size: 19px; font: bold;" >Código do Produto:</span>
-			${review.prod_id}<br>
-		 </div>	
-		 <div>		
-			<span style="font-size: 19px; font: bold;" >Review:</span>
-			${review.descricao}
-		 </div>
-   <!--  ${review.contP} contagem
-		 ${review.contN}
-		 -->
-		 </td>	
-		 <td>
-			<form action="${pageContext.request.contextPath}/review/${review.id}/votarPositivo"	method="get">
-				<div>
-					<input type="hidden" name="review.id" value="${review.id}" />
-					<input type="hidden" name="review.descricao" value="${review.descricao}" />
-					<input type="hidden" name="review.prod_id" value="${review.prod_id}" />
-					<input type="hidden" name="review.usu_id" value="${review.usu_id}" /> 
-					<input type="hidden" name="review.contP" value="${review.contP }" /> 
-					<input type="hidden" name="review.contN" value="${review.contN}" />
-					<input type="submit" id="P" type="button" class="btn" value="POSITIVO"onclick="votoPositivo()"/>										
-				</div>
-			</form>
+	
+	
+	<div>		
+		<img alt="BalaoComentario" src="${pageContext.request.contextPath}/img/balaoComentario6.png" width="35px" align="middle">
+		<span>${quantComentario}</span>		
+		<span style="font-size: 19px; font: bold;" >Comentarios</span>
+	</div>
+	
+	<c:forEach items="${comentarioList}" var="comentario" >
+		
+		
+		<div>
 				
-			<form action="${pageContext.request.contextPath}/review/${review.id}/votarNegativo"	method="get">
-				<div>
-					<input type="hidden" name="review.id" value="${review.id}" />
-					<input type="hidden" name="review.descricao" value="${review.descricao}" />
-					<input type="hidden" name="review.prod_id" value="${review.prod_id}" />
-					<input type="hidden" name="review.usu_id" value="${review.usu_id}" /> 
-					<input type="hidden" name="review.contP" value="${review.contP }" /> 
-					<input type="hidden" name="review.contN" value="${review.contN}" />
-					<input type="submit" id="n" type="button" class="btn" value="NEGATIVO"onclick="votoNegativo()"/>						
-				</div>
-			</form>
-				 	
+		<fieldset style="width: 330px;">
+			<div style="float: left; margin-right: 20px;">		
+				<img alt="ImagemUsuarioComentario" src="${pageContext.request.contextPath}/img/imgUserComentario.png" width="35px" align="middle">
+			</div>
 			
-			<!-- <div>${message}</div> --> 
-				<div id="msg"></div>
-		 </td>	
+			<p><h5>${comentario.dono}</h5></p>
+			<p>${comentario.comentario}</p>
+			<legend></legend>
+		</fieldset>
+		
+				
 	
-		 </tr>
-		 <tr>
-		 
-		 </tr>
-	</table>
-   </fieldset>
- </div>
+		</div>
+		<tr>
+	</c:forEach>
+</fieldset>
 <jsp:include page="../add-on/footer.jsp" />

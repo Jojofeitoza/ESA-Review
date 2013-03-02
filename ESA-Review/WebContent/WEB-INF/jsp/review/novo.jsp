@@ -12,16 +12,17 @@
 			<form class="form-horizontal well" action="${pageContext.request.contextPath}/review" method="post" >				
 				<input type="hidden" name="review.usu_id" value="${usuarioWeb.id}" />
 				<input type="hidden" name="review.prod_id" value="${produto_id}" />
+				<input type="hidden" name="review.dono" value="${usuarioWeb.nome}" />
 				
-				<!-- ou posso usar direto sem usar a variavel produto_id 
-				<!-- modificado -->
-				
-				<input type="hidden" name="review.prod_id" value="${prod_id}" /> ( prod_id está vindo lá do métod novo() da classe ReviewController)
-				
-				-->
-	
 				<label>Descricao:</label>				
-				<textarea rows="" cols="" name="review.descricao"></textarea><br/>							
+				<textarea rows="5" cols="40" name="review.descricao" 
+				          maxlength="300"
+				          style="width: 350px;"
+				          size="40"
+				          title="Informe seu seu texto neste campo! Tamanho máximo:300 caracteres!"
+						  onmouseover="this.style.backgroundColor = 'yellow';"
+						  onmouseout ="this.style.backgroundColor = 'white';">					
+				</textarea><br/>						
  				
  				
 				<input type="submit" value="Salvar" class="btn"/>
