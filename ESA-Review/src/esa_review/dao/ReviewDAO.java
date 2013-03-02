@@ -1,8 +1,15 @@
 package esa_review.dao;
 
 import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+
 import br.com.caelum.vraptor.ioc.Component;
 import esa_review.model.Produto;
 import esa_review.model.Review;
@@ -35,9 +42,26 @@ public class ReviewDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Review> listAll() {
+	public List<Review> listAll() {		
 
-		return this.session.createCriteria(Review.class).list();
+		
+		//select * from review where prod_id='20' order by rev_id desc limit 1
+		return this.session.createCriteria(Review.class)				
+				.addOrder(Order.desc("id"))				
+				.list();
+		
+		/*//pega todos os registros inserido com prod_id 20 ordena decrescente e me devolve só somente um registro
+		return this.session.createCriteria(Review.class)
+				.add(Restrictions.eq("prod_id", 20 ))
+				.addOrder(Order.desc("id")).setMaxResults(1).list();*/
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Review> list(int id_usu) {
+
+		return this.session.createCriteria(Review.class)
+		.add(Restrictions.eq("usu_id", id_usu)).addOrder(Order.desc("id"))
+		.list();
 	}
 	
 	public void update(Review review){
