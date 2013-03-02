@@ -1,110 +1,86 @@
 package esa_review.controller;
 
-import java.text.DecimalFormat;
 import java.util.Collection;
 
 import Autenticacao.Restrito;
-import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import br.com.caelum.vraptor.validator.ValidationMessage;
-import esa_review.dao.ProdutoDAO;
-import esa_review.model.Produto;
+import esa_review.dao.ComentarioDAO;
+import esa_review.model.Comentario;
 
 @Resource
-public class ProdutoController {
-
-	private final ProdutoDAO produtoDAO;
+public class ComentarioController {
+	
+	private final ComentarioDAO comentarioDAO;
 	private final Result result;
 	private Validator validator;
-	private DecimalFormat formatador;
 	
 	
-	public ProdutoController(Result r, Validator validator, ProdutoDAO produtoDAO){
+	
+	public ComentarioController(Result r, Validator validator, ComentarioDAO comentarioDAO){
 		
-		this.result = r;	
+		this.result = r;
+		this.comentarioDAO = comentarioDAO;		
 		this.validator = validator;
-		this.produtoDAO = produtoDAO;
-		this.formatador = new DecimalFormat("#,###.00"); 
 		
 	}
 	
 	@Restrito
-	@Get("/produto/novo")
-	public void novo() {
+	@Get("/comentario/novo")
+	public void novo(int rv_id) {
+		
+		this.result.include("rv_id", rv_id); //esse parametro vem do listar.jsp, está sendo enviado atraves do name do input. 
 		
 		
 	}
 	
-	@Restrito
-	@Get("/produto/{produto.id}/exibir") // {produto.codigo} instancia o objeto produto, chama o setCodigo e esse objeto é passo como parametro no metodo exibir
-	public void exibir(Produto produto){
+	/*@Restrito
+	@Get("/comentario/{comentario.id}/exibir") // {produto.codigo} instancia o objeto produto, chama o setCodigo e esse objeto é passo como parametro no metodo exibir
+	public void exibir(Comentario comentario){
 		
-		produto = produtoDAO.loadById(produto);
+		comentario = comentarioDAO.loadById(comentario);
 		
-		result.include("produto", produto);
+		result.include("comentario", comentario);
 		
-	}
+	}*/
 	
 	
-	@Restrito
-	@Get("/produto")
+	/*@Restrito
+	@Get("/comentario")
 	public void listar(){//nome do metodo tem que ser igual ao nome da pagina jsp(lista.jsp)
 		
-		Collection<Produto> produtoList = this.produtoDAO.listAll();
+		Collection<Comentario> comentarioList = this.comentarioDAO.listAll();
 		
-		result.include("produtoList", produtoList);
+		result.include("comentarioList", comentarioList);
 		
-	}
+	}*/
 	
 	
 	@Restrito
-	@Get("/produto/{id_user}/meusProdutos")//Lista soomente os produtos do usuario logado
-	public void listar(int id_user){
+	@Get("/comentario/{id_rev}/meusComentarios")//Lista soomente os produtos do usuario logado
+	public void listar(int id_rev){
 		
-		Collection<Produto> produtoList = this.produtoDAO.list(id_user);
+		Collection<Comentario> comentarioList = this.comentarioDAO.list(id_rev);
 		
-		result.include("produtoList", produtoList).forwardTo("/WEB-INF/jsp/produto/meusProdutos.jsp");
+		result.include("produtoList", comentarioList).forwardTo("/WEB-INF/jsp/produto/meusComentarios.jsp");
 		
 	}
 	
 	@Restrito
-	@Get("/produto/{id_user}/favoritos")
-	public void addFavorito(){
+	@Post("/comentario")
+	public void salvar(final Comentario comentario){
 		
-	}
-	@Restrito
-	@Get("/produto/{id_user}/favoritos")//Lista somente os produtos do usuario logado
-	public void favoritos(int id_user){
+		//validarCampos(comentario);
 		
-		Collection<Produto> produtoList = this.produtoDAO.favorito(id_user);
+		comentarioDAO.save(comentario);
 		
-		result.include("produtoList", produtoList).forwardTo("/WEB-INF/jsp/produto/favoritos.jsp");
-		
-	}
-	@Restrito
-	@Post("/produto")
-	public void salvar(final Produto produto){
-		
-		validarCampos(produto);
-		
-		if(produto.getPreco().isEmpty())
-			produto.setPreco("0.00");
-		
-				
-		String s = produto.getPreco().replace(".", "").replace(",", ".");	
-		
-		produto.setPreco(s);		
-		
-		produtoDAO.save(produto);
-		
-		result.redirectTo(this).listar(produto.getUsu_id());	
+		result.redirectTo(ReviewController.class).listar();	
 	}
 	
-	@Restrito
+	/*@Restrito
 	@Delete("/produto/{produto.id}")
 	public void remover(Produto produto){
 		
@@ -113,40 +89,36 @@ public class ProdutoController {
 		result.redirectTo(this).listar(produto.getUsu_id());
 		
 		
-	}
+	}*/
 	
-	@Restrito
+	/*@Restrito
 	@Get("/produto/{produto.id}/editar")
 	public void editar(Produto produto){
 		
 		produto = this.produtoDAO.loadById(produto);
 		
-		//System.out.println(produto.getId());
+		System.out.println(produto.getId());
 		
-		/*//Formatar preco que vendo do banco para exibir no jsp
+		//Formatar preco que vendo do banco para exibir no jsp
 		String precoFormatado = formatador.format(Double.parseDouble(produto.getPreco()));     
 		
 		System.out.println(precoFormatado);
 		
 		//produto.setPreco(precoFormatado);	  
-*/		
+		
 		
 		result.include("produto", produto);
 				
-	}
+	}*/
 	
-	@Restrito
+	/*@Restrito
 	@Post("/produto/atualizar")
 	public void atualizar(Produto produto){	
 
 		
-		//Produto prod = this.produtoDAO.loadByCodigo(produto.getCodigo());
-		//System.out.println(prod.getNome());
 		
-		
-		/*
 		 *  Para usar método validarCampos(Produto produto) aqui tenho que modificar para que não seja possível editar o codigo.
-		 */
+		 
 		
 		//Validação de campos utilizando a Classe Validator do Vraptor
 		if(produto.getCodigo().equals("") ){	
@@ -171,9 +143,9 @@ public class ProdutoController {
 			this.validator.add(new ValidationMessage("O campo descrição é obrigatório.", "Descricao"));
 		}
 		
-	/*	if(produto.getPreco() < 0.0){
+		if(produto.getPreco() < 0.0){
 			this.validator.add(new ValidationMessage("O campo preço deve ser positivo.", "Preco"));
-		}	*/
+		}	
 		
 		
 		this.validator.onErrorUsePageOf(this).novo();
@@ -186,7 +158,8 @@ public class ProdutoController {
 		//retir o primeiro ponto e coloco virgula para poder gravar no banco
 		String s = produto.getPreco().replace(".", "").replace(",", ".");	
 		
-				
+		System.out.println(s);
+		
 		produto.setPreco(s);
 		
 		this.produtoDAO.update(produto);
@@ -194,17 +167,17 @@ public class ProdutoController {
 		result.forwardTo(this).exibir(produto);		
 		
 		
-	}
+	}*/
 	
 	
 	
-	public void validarCampos(Produto produto){
+	/*public void validarCampos(Produto produto){
 		
-		/* <input type="text" name="produto.codigo" value="${produto.codigo}"
+		 <input type="text" name="produto.codigo" value="${produto.codigo}"
 		 * 
 		 *  coloquei value="..." nos input da pagina novo.jsp, só assim ele não deixou adicionar o produto com o erro
 		 *  
-		 */
+		 
 		
 		//Validação de campos utilizando a Classe Validator do Vraptor
 		if(produto.getCodigo().equals("") ){
@@ -234,39 +207,13 @@ public class ProdutoController {
 			this.validator.add(new ValidationMessage("O campo descrição é obrigatório.", "Descricao"));
 		}
 		
-	/*	if(produto.getPreco() < 0.0){
+		if(produto.getPreco() < 0.0){
 			this.validator.add(new ValidationMessage("O campo preço deve ser positivo.", "Preco"));
-		}*/	
+		}	
 		
 		
 		this.validator.onErrorUsePageOf(this).novo();
 		//fim - Validação de campos utilizando a Classe Validator do Vraptor
-	}	
-	@Restrito
-
-	 @Get("/produto/busca")	
-
-	public void busca(Produto produto) {		
-
-			/*if(produto.getNome().length()< 3){
-
-			 this.validator.add(new ValidationMessage("A palavra deve contém no mínimo 3 caracteres.", "Descricao"));
-
-		}
-		
-
-		 this.validator.onErrorUsePageOf(this).busca(produto);
-
-		*/
-
-		
-
-		 Collection<Produto> produtoList = this.produtoDAO.busca(produto.getNome());
-
-		
-
-		result.include("produtoList", produtoList);
-
-	 }
+	}*/
 
 }

@@ -1,12 +1,6 @@
 package esa_review.controller;
 
-import java.util.ArrayList;
 import java.util.Collection;
-
-import ordena_review.BoobleSort;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import Autenticacao.Restrito;
 import br.com.caelum.vraptor.Get;
@@ -14,11 +8,10 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
-import esa_review.dao.CriadorDeSessionFactory;
-import esa_review.dao.CriadorSession;
+import esa_review.dao.ComentarioDAO;
 import esa_review.dao.ProdutoDAO;
 import esa_review.dao.ReviewDAO;
-import esa_review.dao.UsuarioDAO;
+import esa_review.model.Comentario;
 import esa_review.model.Produto;
 import esa_review.model.Review;
 
@@ -26,21 +19,20 @@ import esa_review.model.Review;
 public class ReviewController {
 
 	private final ReviewDAO reviewDAO;
+	private final ProdutoDAO produtoDAO;
 	private final Result result;
 	private Validator validator;
-	private final UsuarioDAO usuarioDAO;
-	private final ProdutoDAO produtoDAO;// acrescentado 08/02/2013
 	
-	public ReviewController(Result r, Validator validator, UsuarioDAO usuarioDAO,
-							ProdutoDAO produtoDAO){
-		this.result = r;
-		this.usuarioDAO = usuarioDAO;
-		this.produtoDAO = produtoDAO;// acrescentado 08/02/2013
-		SessionFactory factory = new CriadorDeSessionFactory().getInstance();
-		Session session = new CriadorSession(factory).getInstance();
+	public final ComentarioDAO comentarioDAO;
+	
+	
+	public ReviewController(Result r, Validator validator, ComentarioDAO comentarioDAO, ProdutoDAO produtoDAO, ReviewDAO reviewDAO ){
 		
+		this.result = r;			
 		this.validator = validator;
-		this.reviewDAO = new ReviewDAO(session);
+		this.comentarioDAO = comentarioDAO;
+		this.reviewDAO = reviewDAO;
+		this.produtoDAO = produtoDAO;
 		
 		
 	}
@@ -56,13 +48,17 @@ public class ReviewController {
 	@Restrito
 	@Get("/review/{review.id}/exibir") // {review.id} instancia o objeto review, chama o setCodigo e esse objeto é passo como parametro no metodo exibir
 	public void exibir(Review review){
-		Collection<Review> reviewList = this.reviewDAO.listAll();
-		Collection<Produto> produtoList = this.produtoDAO.listAll();// acrescentado 08/02/2013
-		result.include("produtoList", produtoList);// acrescentado 08/02/2013
-		result.include("reviewList", reviewList);
 		
 		review = reviewDAO.loadById(review);
-		result.include("review", review);
+		
+		Collection<Comentario> comentarioList = this.comentarioDAO.list(review.getId());//Lista todos os comentarios desse review
+		Long quantComentario = this.comentarioDAO.quantComentario(review);
+		Produto produto = this.produtoDAO.loadById(review.getProd_id());
+		
+		this.result.include("review", review)
+		.include("comentarioList", comentarioList)
+		.include("quantComentario", quantComentario)
+		.include("nome", produto.getNome());
 		
 		
 	}
@@ -71,17 +67,20 @@ public class ReviewController {
 	@Restrito
 	@Get("/review")
 	public void listar(){//nome do metodo tem que ser igual ao nome da pagina jsp(lista.jsp)
-		Review review = new Review();
+		
 		Collection<Review> reviewList = this.reviewDAO.listAll();
 		
-		// ordenar a lista pela votação posiitiva
-		//ArrayList lista =  (ArrayList) reviewList;
-		//BoobleSort booble = new BoobleSort(  );
-		//reviewList  = (Collection<Review>) booble.ordena(lista);
+		result.include("reviewList", reviewList);		
 		
-		Collection<Produto> produtoList = this.produtoDAO.listAll();// acrescentado 08/02/2013
-		result.include("produtoList", produtoList);// acrescentado 08/02/2013
-		result.include("reviewList", reviewList);
+	}
+	
+	@Restrito
+	@Get("/review/{id_user}/meusReviews")//Lista soomente os produtos do usuario logado
+	public void listar(int id_user){
+		
+		Collection<Review> reviewList = this.reviewDAO.list(id_user);
+		
+		result.include("reviewList", reviewList).forwardTo("/WEB-INF/jsp/review/meusReviews.jsp");
 		
 	}
 	
@@ -89,34 +88,13 @@ public class ReviewController {
 	@Post("/review")
 	public void salvar(final Review review){
 		
-		//review.setContP(1);
-		
 		reviewDAO.save(review);
 		
-		result.redirectTo(this).listar();		
+		//result.redirectTo(this).listar(review.getUsu_id()); será ativa quando habiltar o menu meusReviews
+		result.redirectTo(this).listar();
 	}
 
-/*	@Restrito
-	@Delete("/review/{review.codigo}")
-	public void remover(Review review){
-		
-		review = this.reviewDAO.remove(review);
-		
-		result.redirectTo(ProdutoController.class).listar();	
-		
-		
-	}
-	
-	@Restrito
-	@Get("/review/{review.codigo}/editar")
-	public void editar(Review review){
-		
-		review = this.reviewDAO.loadById(review);
-		
-		result.include("review", review);
-				
-	}*/
-	
+
 	@Restrito
 	@Get("/review/{review.id}/votarPositivo")
 	public void votarPositivo(Review review){	
@@ -147,6 +125,26 @@ public class ReviewController {
 		this.atualizar(aux);
 	}
 	
+/*	@Restrito
+	@Delete("/review/{review.codigo}")
+	public void remover(Review review){
+		
+		review = this.reviewDAO.remove(review);
+		
+		result.redirectTo(ProdutoController.class).listar();	
+		
+		
+	}
+	
+	@Restrito
+	@Get("/review/{review.codigo}/editar")
+	public void editar(Review review){
+		
+		review = this.reviewDAO.loadById(review);
+		
+		result.include("review", review);
+				
+	}*/
 	@Restrito
 	@Post("/review/atualizar")
 	public void atualizar(Review review){	
@@ -194,7 +192,61 @@ public class ReviewController {
 		
 		this.reviewDAO.update(review);
 		
-		result.forwardTo(this).listar();		
+		//result.forwardTo(this).listar(); // assim fica viciado no voto anteriormente selecionado
+		
+		result.redirectTo(this).listar();
+		
+		
+	}
+	
+	/**@Restrito
+	@Post("/review/atualizar")
+	public void atualizar(Review review){	
+
+		
+		
+		//  Para usar método validarCampos(Produto produto) aqui tenho que modificar para que não seja possível editar o codigo.
+		 
+		
+		//Validação de campos utilizando a Classe Validator do Vraptor
+		if(review.getId() == 0 ){	
+			
+			this.validator.add(new ValidationMessage("O campo código é obrigário", "Codigo"));
+			
+		}else if(!review.getCodigo().matches("\\d+")){
+			
+			this.validator.add(new ValidationMessage("O campo código deve conter apenas números.", "Codigo"));
+		}
+		
+		if(review.getNome().equals("")){
+			
+			this.validator.add(new ValidationMessage("O campo nome é obrigatorio.", "Nome"));		
+			
+		}else if(review.getNome().length() < 3){
+			
+			this.validator.add(new ValidationMessage("O campo nome deve ter no mínimo 3 caracteres.", "Nome"));
+		}
+		
+		if(review.getDescri().equals("")){
+			this.validator.add(new ValidationMessage("O campo descrição é obrigatório.", "Descricao"));
+		}
+		
+		if(review.getPreco() < 0.0){
+			this.validator.add(new ValidationMessage("O campo preço deve ser positivo.", "Preco"));
+		}	
+		
+		
+		this.validator.onErrorUsePageOf(this).novo();
+		//fim - Validação de campos utilizando a Classe Validator do Vraptor
+		
+		
+		
+		
+		
+		
+		//this.reviewDAO.update(review);
+		
+		//result.forwardTo(this).exibir(review);		
 		
 		
 	}
