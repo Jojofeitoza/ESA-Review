@@ -10,15 +10,22 @@ public class Produto {
 
 
 	@Id	
+	@Column(name = "prod_id")
+	private int id;
 	@Column(name = "prod_cod")
 	private String codigo;
 	@Column (name = "prod_nome")
 	private String nome;
+	@Column (name = "usu_id")
+	private int usu_id;	
 	@Column (name = "prod_desc")
 	private String descri;
 	//private String categ;
+	
+	/* preco está como string para eu pode formatar o valor ao salvar e buscar no banco de dados(no banco de dados preco esta como varchar)	 * 
+	 */	
 	@Column (name = "prod_preco")
-	private float preco;
+	private String preco;
 	@Column (name = "prod_img")
 	private String imagem;
 
@@ -51,11 +58,11 @@ public class Produto {
 		this.descri = descri;
 	}
 
-	public float getPreco() {
+	public String getPreco() {
 		return this.preco;
 	}
 
-	public void setPreco(float preco) {
+	public void setPreco(String preco) {
 		this.preco = preco;
 	}
 
@@ -65,6 +72,22 @@ public class Produto {
 
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getUsu_id() {
+		return usu_id;
+	}
+
+	public void setUsu_id(int usu_id) {
+		this.usu_id = usu_id;
 	}
 
 }

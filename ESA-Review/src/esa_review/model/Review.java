@@ -25,6 +25,8 @@ public class Review {
 	
 	@Column(name = "rev_contN")
 	private int contN ;
+	@Column(name = "dono")
+	private String dono;
 	
 	public int getId() {
 		return id;
@@ -61,6 +63,12 @@ public class Review {
 	}
 	public void setProd_id(int prod_id) {
 		this.prod_id = prod_id;
+	}
+	public String getDono() {
+		return dono;
+	}
+	public void setDono(String dono) {
+		this.dono = dono;
 	}
 	
 	
